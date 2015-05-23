@@ -27,11 +27,11 @@
     "public": false
   },
   "Song": {
-    "dataSource": "db",
+    "dataSource": "mysqlDs",
     "public": true
   },
   "Playlist": {
-    "dataSource": "db",
+    "dataSource": "mysqlDs",
     "public": true
   }
 }
