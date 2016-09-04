@@ -12,6 +12,7 @@ import createStore from 'data/create-store';
 function ServerHTML(props) {
   const {
     children,
+    chunks,
     initialState,
   } = props;
 
@@ -28,13 +29,15 @@ function ServerHTML(props) {
         {head.link.toComponent()}
         {head.script.toComponent()}
         {head.style.toComponent()}
+
+        <link type="stylesheet" href={chunks.styles.main} />
       </head>
       <body>
         <div id="main" dangerouslySetInnerHTML={{ __html: content }} />
 
         <SetInitialState state={initialState} />
 
-        <script src={'TODO: client'} />
+        <script src={chunks.javascript.main} />
       </body>
     </html>
   );
@@ -42,10 +45,14 @@ function ServerHTML(props) {
 
 ServerHTML.propTypes = {
   children: PropTypes.node,
+  chunks: PropTypes.shape({
+    javascript: PropTypes.object.isRequired,
+    styles: PropTypes.object.isRequired,
+  }).isRequired,
   initialState: PropTypes.object,
 };
 
-export default function* Handler() {
+export default (params) => function* Handler() {
   const ctx = this;
 
   const store = createStore();
@@ -65,17 +72,16 @@ export default function* Handler() {
       } else if (renderProps) {
         // Let's do some rendering!
         ctx.body = `<!doctype html>${ReactDOM.renderToString(
-          <ServerHTML initialState={store.getState()}>
+          <ServerHTML initialState={store.getState()} chunks={params.chunks()}>
             <Provider store={store}>
               <RouterContext {...renderProps} />
             </Provider>
           </ServerHTML>
-        )}`);
+        )}`;
         ctx.type = 'html';
       } else {
         ctx.status = 404;
       }
     }
   );
-}
 }

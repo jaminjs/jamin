@@ -1,24 +1,35 @@
-path = require('path');
+const path = require('path');
+const fs = require('fs');
 
 const REPO_ROOT = path.resolve(
   __dirname,
   '..'
 );
 
+const packageDirs = fs.readdirSync(path.join(REPO_ROOT, 'packages'))
+  .filter(dir =>
+    fs.statSync(path.join(REPO_ROOT, 'packages', dir)).isDirectory()
+  );
+
+const alias = packageDirs.reduce((obj, p) => {
+  obj[p] = path.join(REPO_ROOT, 'packages', p);
+  return obj;
+}, {});
+
 module.exports = {
   context: REPO_ROOT,
-  entry: './packages/server/client.js',
+  entry: [
+    'babel-polyfill',
+    './packages/server/client.js',
+  ],
   output: {
+    filename: '[name]-[chunkhash].js',
     path: REPO_ROOT + '/build',
     publicPath: '/assets/',
   },
 
   resolve: {
-    // Behaves similar to process.env.NODE_PATH
-    modulesDirectories: [
-      'packages',
-      'node_modules',
-    ],
+    alias,
   },
   module: {
     loaders: [
@@ -26,16 +37,13 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel',
-        query: {
-          presets: ['react', 'es2015'],
-          env: {
-            production: {
-              plugins: [
-                'ramda',
-              ],
-            },
-          },
-        },
+      },
+      {
+        test: /\.css$/,
+        loaders: [
+          'style',
+          'css?modules&localIdentName=[name]__[local]___[hash:base64:5]',
+        ],
       },
     ],
   },

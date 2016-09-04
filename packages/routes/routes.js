@@ -6,8 +6,8 @@ import Home from './home/home';
 
 export default function getRoutes() {
   return (
-    <IndexRoute component={App}>
+    <Route path="/" component={App}>
       <IndexRoute name="home" component={Home} />
-    </IndexRoute>
+    </Route>
   );
 }
