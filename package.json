@@ -4,14 +4,19 @@
   "description": "Simple music player/server",
   "main": "bin/server.js",
   "scripts": {
-    "build": "webpack build --config=./setup/webpack.config.js",
-    "dev": "npm-run-all prepare:dev start:dev",
+    "build": "npm-run-all --parallel build:client build:server",
+    "build:client": "webpack --config './setup/webpack.config.client.entry.js' --colors --display-error-details",
+    "build:server": "webpack --config './setup/webpack.config.server.entry.js' --colors --display-error-details",
     "prepare:dev": "universal-webpack --settings './setup/universal-webpack-settings.js' prepare",
     "server:dev": "NODE_ENV=dev nodemon './bin/server.entry.js' --watch './build/server'",
+    "server:prod": "NODE_ENV=prod ./bin/server.entry.js",
     "start:dev": "npm-run-all --parallel wds watch server:dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --config './setup/webpack.config.server.entry.js' --colors --display-error-details",
-    "wds": "webpack-dev-server --hot --inline --config './setup/webpack.config.client.entry.js' --port 3001 --colors --display-error-details"
+    "wds": "webpack-dev-server --hot --inline --config './setup/webpack.config.client.entry.js' --port 3001 --colors --display-error-details",
+
+    "dev": "npm-run-all prepare:dev start:dev",
+    "prod": "npm-run-all build server:prod"
   },
   "repository": {
     "type": "git",

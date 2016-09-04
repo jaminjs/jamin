@@ -27,6 +27,11 @@ module.exports = {
     path: REPO_ROOT + '/build',
     publicPath: '/assets/',
   },
+  node: {
+    // Disable webpack's overwriting of __dirname
+    // This is needed for serving static assets in prod mode
+    __dirname: false,
+  },
 
   resolve: {
     alias,

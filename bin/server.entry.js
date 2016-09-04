@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 // this .entry.js file simply enables ES6 language features
 
 require('babel-register');
