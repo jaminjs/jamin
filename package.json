@@ -8,15 +8,33 @@
     "build:client": "webpack --config './setup/webpack.config.client.entry.js' --colors --display-error-details",
     "build:server": "webpack --config './setup/webpack.config.server.entry.js' --colors --display-error-details",
     "prepare:dev": "universal-webpack --settings './setup/universal-webpack-settings.js' prepare",
-    "server:dev": "NODE_ENV=dev nodemon './bin/server.entry.js' --watch './build/server'",
-    "server:prod": "NODE_ENV=prod ./bin/server.entry.js",
+    "server:dev": "better-npm-run server:dev",
+    "server:prod": "better-npm-run server:prod",
     "start:dev": "npm-run-all --parallel wds watch server:dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --config './setup/webpack.config.server.entry.js' --colors --display-error-details",
     "wds": "webpack-dev-server --hot --inline --config './setup/webpack.config.client.entry.js' --port 3001 --colors --display-error-details",
-
     "dev": "npm-run-all prepare:dev start:dev",
-    "prod": "npm-run-all build server:prod"
+    "prod": "npm-run-all build server:prod",
+    "flow:check": "babel-node bin/flow-check",
+    "lint": "eslint src tests server",
+    "lint:fix": "npm run lint -- --fix",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "betterScripts": {
+    "server:dev": {
+      "command": "nodemon './bin/server.entry.js' --watch './build/server'",
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+    "server:prod": {
+      "command": "./bin/server.entry.js",
+      "env": {
+        "NODE_ENV": "prod"
+      }
+    }
   },
   "repository": {
     "type": "git",
@@ -33,9 +51,11 @@
   },
   "homepage": "https://github.com/jetpacmonkey/music#readme",
   "dependencies": {
-    "babel-polyfill": "^6.9.1",
+    "babel-cli": "^6.14.0",
+    "babel-polyfill": "^6.13.0",
     "classnames": "^2.2.5",
     "extract-text-webpack-plugin": "^1.0.1",
+    "flow-bin": "^0.29.0",
     "isomorphic-fetch": "^2.2.1",
     "koa": "^1.2.0",
     "koa-mount": "^1.3.0",
@@ -49,6 +69,7 @@
     "react-router": "^2.5.2",
     "react-router-redux": "^4.0.5",
     "react-router-scroll": "^0.2.1",
+    "recompose": "^0.20.2",
     "redux": "^3.5.2",
     "sequelize": "^3.23.4",
     "serialize-javascript": "^1.3.0",
@@ -58,16 +79,31 @@
     "use-named-routes": "^0.3.1"
   },
   "devDependencies": {
+    "@kadira/storybook": "^2.5.2",
     "babel": "^6.5.2",
     "babel-core": "^6.10.4",
+    "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.4",
     "babel-plugin-ramda": "^1.1.6",
     "babel-plugin-transform-flow-strip-types": "^6.8.0",
-    "babel-polyfill": "^6.13.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
+    "babel-preset-react-optimize": "^1.0.1",
+    "babel-preset-stage-0": "^6.3.13",
+    "better-npm-run": "0.0.11",
     "chai": "^3.5.0",
-    "eslint": "^3.0.1",
+    "eslint": "^3.4.0",
+    "eslint-config-standard": "^5.1.0",
+    "eslint-config-standard-react": "^2.2.0",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-flow-vars": "^0.4.0",
+    "eslint-plugin-immutable": "^1.0.0",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^1.3.0",
+    "eslint-plugin-promise": "^1.0.8",
+    "eslint-plugin-react": "^5.2.2",
+    "eslint-plugin-standard": "^1.3.1",
     "flow-bin": "^0.29.0",
     "koa-proxy": "^0.6.0",
     "mocha": "^2.5.3",
