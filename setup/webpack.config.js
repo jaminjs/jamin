@@ -23,7 +23,7 @@ module.exports = {
     './packages/server/client.js',
   ],
   output: {
-    filename: '[name]-[chunkhash].js',
+    filename: '[name]-[hash].js',
     path: REPO_ROOT + '/build',
     publicPath: '/assets/',
   },
